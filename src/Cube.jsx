@@ -35,7 +35,9 @@ const Cube = (props) => {
 		  [x, y, z + 1],
 		  [x, y, z - 1],
 		]
+
 		addCube(...dir[Math.floor(e.faceIndex / 2)])
+		setAction('attack'); 
 	  }, [])
 
 	return (

@@ -12,7 +12,6 @@ export default function Ground(props) {
 			{...props}
 			type="fixed"
 			colliders={false}
-			
 		>
 			<mesh
 				receiveShadow
