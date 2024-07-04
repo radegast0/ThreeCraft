@@ -126,7 +126,7 @@ export function Player({ speed, jump, action, setAction }) {
 			colliders={false}
 			mass={1}
 			type="dynamic"
-			position={[0, 2, 0]}
+			position={[0, 4, 0]}
 			enabledRotations={[false, false, false]} // Prevent rotation
 			canSleep={false}
 			restitution={0.2}

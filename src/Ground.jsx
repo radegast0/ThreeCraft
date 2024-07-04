@@ -7,7 +7,7 @@ import dirtTexture from './assets/dirt.jpg';
 import useCubeStore from './store';
 import { Noise } from 'noisejs';
 
-const size = 25;
+const size = 20;
 const maxHeight = 1;
 
 const Ground = () => {
