@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 html,
 body,
 #root {
@@ -11,27 +15,3 @@ body,
 	overflow: hidden;
 }
 
-.cursor {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	font-size: 40px; /* Adjust the font size as needed */
-	color: white; /* Adjust the color as needed */
-	user-select: none; /* Prevent text selection */
-	pointer-events: none; /* Allow clicking through the cursor */
-	z-index: 1000;
-	font-weight: bolder;
-}
-.outer {
-	position: absolute;
-	top: 5%;
-	left: 5%;
-	font-size: 16px; /* Adjust the font size as needed */
-	color: white; /* Adjust the color as needed */
-	user-select: none; /* Prevent text selection */
-	pointer-events: none; /* Allow clicking through the cursor */
-	z-index: 1000;
-	font-weight: normal;
-	font-family: monospace;
-}
