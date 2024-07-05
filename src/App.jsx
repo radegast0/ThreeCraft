@@ -1,24 +1,19 @@
 import {
+	Environment,
 	KeyboardControls,
-	Loader,
-	OrbitControls,
-	PerformanceMonitor,
 	PointerLockControls,
 	Sky,
 } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import Ground from './Ground';
 import { Physics } from '@react-three/rapier';
-import Cube, { Cubes } from './Cube';
 import { Player } from './Player';
-import { Suspense, useState } from 'react';
+import { useState } from 'react';
 import TextureSelector from './TextureSelector';
-import { getPerf, Perf } from 'r3f-perf';
+import { Perf } from 'r3f-perf';
 
 function App() {
 	const [action, setAction] = useState('idle');
-
-	
 
 	return (
 		<>
@@ -44,44 +39,39 @@ function App() {
 					{ name: 'changePov', keys: ['c', 'C'] },
 				]}
 			>
-				<Suspense fallback={<Loader />}>
-					<Canvas
-						frameloop="demand"
-						shadows
-						camera={{
-							fov: 45,
-							near: 0.1,
-							far: 25,
-						}}
-					>
-						<Sky sunPosition={[10, 10, 10]} />
-						<directionalLight
-							castShadow
-							position={[4, 4, 1]}
-							intensity={3.5}
-						/>
-						{/* <OrbitControls /> */}
-						<ambientLight intensity={1.5} />
-						<Physics
-							gravity={[0, -20, 0]}
-							// debug
-						>
-							<Ground />
-							<Player
-								setAction={setAction}
-								action={action}
-								speed={4}
-								jump={8}
-							/>
-							{/* <Cube position={[0, 0.5, 0]} /> */}
-							<Cubes />
-							{/* <Perf /> */}
+				<Canvas
+					frameloop="demand"
+					shadows
+					camera={{
+						fov: 45,
+					}}
+				>
+					<Environment files={'/meadow_2k.hdr'} background />
+					<Perf />
 
-						</Physics>
-						<PointerLockControls />
-						
-					</Canvas>
-				</Suspense>
+					<directionalLight
+						castShadow
+						position={[4, 4, 1]}
+						intensity={3.5}
+					/>
+					<ambientLight intensity={1.5} />
+					<Physics
+						debug
+						gravity={[0, -20, 0]}
+					>
+						<Ground />
+						<Player
+							setAction={setAction}
+							action={action}
+							speed={4}
+							jump={8}
+						/>
+						{/* <Cube position={[0, 0.5, 0]} /> */}
+						{/* <Cubes /> */}
+						{/* <Perf /> */}
+					</Physics>
+					<PointerLockControls />
+				</Canvas>
 			</KeyboardControls>
 		</>
 	);

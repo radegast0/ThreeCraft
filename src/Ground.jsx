@@ -1,94 +1,80 @@
-import React, { useEffect, useMemo, useRef, useCallback } from 'react';
-import * as THREE from 'three';
 import { useTexture } from '@react-three/drei';
-import { RigidBody, useRapier } from '@react-three/rapier';
-import grassTexture from './assets/grass.jpg';
-import dirtTexture from './assets/dirt.jpg';
-import useCubeStore from './store';
+import {
+	CuboidCollider,
+	InstancedRigidBodies,
+	RigidBody,
+} from '@react-three/rapier';
+import React, { useMemo } from 'react';
+import grassTexture from './assets/grass2.jpg';
 import { Noise } from 'noisejs';
 
-const size = 20;
-const maxHeight = 1;
-
 const Ground = () => {
-	const { physics } = useRapier();
+	const grass = useTexture(grassTexture);
+
+	const size = 24;
+	const noiseScale = 0.1; // terrain smoothness
+	const heightThreshold = 0.3; // the division point for heights
+
 	const noise = useMemo(() => new Noise(Math.random()), []);
-	const textures = useTexture([grassTexture, dirtTexture]);
 
-	const materials = useMemo(
-		() => ({
-			grass: new THREE.MeshStandardMaterial({ map: textures[0] }),
-			dirt: new THREE.MeshStandardMaterial({ map: textures[1] }),
-		}),
-		[textures]
-	);
-
-	const generateTerrain = useCallback(() => {
-		const cubes = new Array(size * size);
-		for (let x = -size / 2; x < size / 2; x++) {
-			for (let z = -size / 2; z < size / 2; z++) {
-				const y = Math.floor(noise.simplex2(x / 10, z / 10) * maxHeight);
-				const texture = y > -1 ? 'grass' : 'dirt';
-				const index = x + size / 2 + (z + size / 2) * size;
-				cubes[index] = { position: [x, y, z], texture };
+	const instances = useMemo(() => {
+		const instances = [];
+		for (let x = 0; x < size; x++) {
+			for (let z = 0; z < size; z++) {
+				const noiseValue = noise.simplex2(x * noiseScale, z * noiseScale);
+				// Snap height to two levels based on the threshold
+				const height = noiseValue > heightThreshold ? 1 : 0;
+				instances.push({
+					key: `instance_${x}_${z}`,
+					position: [x - size / 2, height, z - size / 2],
+					rotation: [0, 0, 0],
+				});
 			}
 		}
-		useCubeStore.setState({ cubes });
-	}, [noise]);
 
-	useEffect(() => {
-		generateTerrain();
-	}, [generateTerrain]);
-
-	const cubes = useCubeStore((state) => state.cubes);
-
-	if (!physics) {
-		return null;
-	}
+		console.log(instances.length);
+		return instances;
+	}, [size, noise, noiseScale, heightThreshold]);
 
 	return (
-		<RigidBody type="fixed">
-			<InstancedCubes cubes={cubes} materials={materials} />
-			<mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.5, 0]}>
-				<planeGeometry args={[size, size]} />
-				<meshStandardMaterial color="green" />
-			</mesh>
-		</RigidBody>
-	);
-};
+		<>
+			<RigidBody type="fixed">
+				{/**Back */}
+				<CuboidCollider
+					args={[size / 2, 10, 0.5]}
+					position={[-0.5, 0, size / 2]}
+				/>
+				{/**Right */}
+				<CuboidCollider
+					args={[0.5, 10, size / 2]}
+					position={[size / 2, 0, -0.5]}
+				/>
+				{/**Front */}
+				<CuboidCollider
+					args={[size / 2, 10, 0.5]}
+					position={[-0.5, 0, -size / 2 - 1]}
+				/>
+				{/**Left */}
+				<CuboidCollider
+					args={[0.5, 10, size / 2]}
+					position={[-size / 2 - 1, 0, -0.5]}
+				/>
+			</RigidBody>
 
-const InstancedCubes = ({ cubes, materials }) => {
-	const instancedMeshRef = useRef();
-	const geometry = useMemo(() => new THREE.BoxGeometry(1, 1, 1), []); // Create the geometry once
-
-	useEffect(() => {
-		if (!instancedMeshRef.current) return;
-
-		const matrix = new THREE.Matrix4();
-
-		const instanceCount = cubes.length;
-		const positions = new Float32Array(instanceCount * 3);
-
-		cubes.forEach((cube, i) => {
-			const { position, texture } = cube;
-			const material = materials[texture];
-
-			matrix.setPosition(...position);
-			matrix.toArray(positions, i * 3);
-
-			color.set(material.color);
-			color.toArray(colors, i * 3);
-		});
-
-		instancedMeshRef.current.geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-
-		instancedMeshRef.current.instanceMatrix.needsUpdate = true;
-	}, [cubes, materials]);
-
-	return (
-		<InstancedMesh ref={instancedMeshRef} args={[geometry, null, cubes.length]}>
-			<meshStandardMaterial />
-		</InstancedMesh>
+			<InstancedRigidBodies
+				type="fixed"
+				instances={instances}
+			>
+				<instancedMesh
+					frustumCulled={false}
+					castShadow
+					args={[null, null, size * size]}
+				>
+					<boxGeometry />
+					<meshStandardMaterial map={grass} />
+				</instancedMesh>
+			</InstancedRigidBodies>
+		</>
 	);
 };
 
