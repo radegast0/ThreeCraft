@@ -46,7 +46,7 @@ function App() {
 						fov: 45,
 					}}
 				>
-					<Environment files={'/meadow_2k.hdr'} background />
+					<Environment files={'/lilienstein_2k.hdr'} background />
 					<Perf />
 
 					<directionalLight
