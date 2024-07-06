@@ -1,21 +1,43 @@
+// import { create } from 'zustand';
+
+// const useCubeStore = create((set) => ({
+// 	cubes: [],
+// 	selectedTexture: 'dirt', // Default texture
+// 	addCube: (x, y, z, texture) => {
+// 		set((state) => ({
+// 			cubes: [
+// 				...state.cubes,
+// 				{ position: [x, y, z], texture: texture || state.selectedTexture },
+// 			],
+// 		}));
+// 	},
+// 	addCubes: (newCubes) =>
+// 		set((state) => ({ cubes: [...state.cubes, ...newCubes] })),
+// 	setSelectedTexture: (texture) => {
+// 		set({ selectedTexture: texture });
+// 	},
+// }));
+
 import { create } from 'zustand';
 
-const useCubeStore = create((set) => ({
-	cubes: [],
-	selectedTexture: 'dirt', // Default texture
+const useStore = create((set) => ({
+	// initial state
+	instances: [],
+	setInstances: (instances) => set({ instances }),
+
+	// texture
+	selectedTexture: 'dirt',
+	setSelectedTexture: (texture) => set({ selectedTexture: texture }),
+
+	// add cube
 	addCube: (x, y, z, texture) => {
 		set((state) => ({
-			cubes: [
-				...state.cubes,
+			instances: [
+				...state.instances,
 				{ position: [x, y, z], texture: texture || state.selectedTexture },
 			],
 		}));
 	},
-	addCubes: (newCubes) =>
-		set((state) => ({ cubes: [...state.cubes, ...newCubes] })),
-	setSelectedTexture: (texture) => {
-		set({ selectedTexture: texture });
-	},
 }));
 
-export default useCubeStore;
+export default useStore;

@@ -11,7 +11,7 @@ import { Noise } from 'noisejs';
 const Ground = () => {
 	const grass = useTexture(grassTexture);
 
-	const size = 24;
+	const size = 30;
 	const noiseScale = 0.1; // terrain smoothness
 	const heightThreshold = 0.3; // the division point for heights
 

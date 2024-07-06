@@ -1,12 +1,9 @@
 import {
 	Environment,
 	KeyboardControls,
-	OrbitControls,
 	PointerLockControls,
-	Sky,
 } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
-import Ground from './Ground';
 import { Physics } from '@react-three/rapier';
 import { Player } from './Player';
 import { useState } from 'react';
@@ -61,7 +58,7 @@ function App() {
 					<ambientLight intensity={1.5} />
 					<Physics
 						gravity={[0, -20, 0]}
-						
+						debug
 					>
 						<Ground_2 />
 						<Player
@@ -84,8 +81,8 @@ function App() {
 							speed={4}
 							jump={8}
 						/>
-					</Physics>
-					<PointerLockControls /> */}
+					</Physics> */}
+					<PointerLockControls />
 				</Canvas>
 			</KeyboardControls>
 		</>
