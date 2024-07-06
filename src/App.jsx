@@ -1,6 +1,7 @@
 import {
 	Environment,
 	KeyboardControls,
+	OrbitControls,
 	PointerLockControls,
 	Sky,
 } from '@react-three/drei';
@@ -10,6 +11,7 @@ import { Physics } from '@react-three/rapier';
 import { Player } from './Player';
 import { useState } from 'react';
 import TextureSelector from './TextureSelector';
+import Ground_2 from './Ground_2';
 import { Perf } from 'r3f-perf';
 
 function App() {
@@ -46,9 +48,11 @@ function App() {
 						fov: 45,
 					}}
 				>
-					<Environment files={'/lilienstein_2k.hdr'} background />
-					<Perf />
-
+					<Environment
+						files={'/lilienstein_2k.hdr'}
+						background
+					/>
+					{/* <OrbitControls /> */}
 					<directionalLight
 						castShadow
 						position={[4, 4, 1]}
@@ -56,6 +60,20 @@ function App() {
 					/>
 					<ambientLight intensity={1.5} />
 					<Physics
+						gravity={[0, -20, 0]}
+						
+					>
+						<Ground_2 />
+						<Player
+							setAction={setAction}
+							action={action}
+							speed={4}
+							jump={8}
+						/>
+					</Physics>
+					<PointerLockControls />
+					<Perf />
+					{/* <Physics
 						debug
 						gravity={[0, -20, 0]}
 					>
@@ -66,11 +84,8 @@ function App() {
 							speed={4}
 							jump={8}
 						/>
-						{/* <Cube position={[0, 0.5, 0]} /> */}
-						{/* <Cubes /> */}
-						{/* <Perf /> */}
 					</Physics>
-					<PointerLockControls />
+					<PointerLockControls /> */}
 				</Canvas>
 			</KeyboardControls>
 		</>
