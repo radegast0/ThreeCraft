@@ -1,20 +1,19 @@
 import { useTexture } from '@react-three/drei';
 import React, { useMemo, useEffect } from 'react';
-import grassTexture from './assets/grass2.jpg';
+import grassTexture from './assets/grass.jpg';
 import { Noise } from 'noisejs';
 import { CuboidCollider, RigidBody } from '@react-three/rapier';
 import Cubes from './Cubes';
 import useStore from './store'; // Correct import
-import Cube_2 from './Cube_2';
 
 const noise = new Noise();
 
 const Ground_2 = () => {
 	const grass = useTexture(grassTexture);
-	const size = 20; // grid size
+	const size = 30; // grid size
 	const noiseScale = 0.1; // noise frequency
-	const heightThreshold = 0.4; // height threshold
-	const { setInstances, instances } = useStore();
+	const heightThreshold = 0.55; // height threshold
+	const { setInstances } = useStore();
 
 	const instancesMemo = useMemo(() => {
 		const instancesArray = [];
@@ -39,7 +38,7 @@ const Ground_2 = () => {
 	return (
 		<>
 			<Cubes
-				limit={20 * 20}
+				limit={30 * 30}
 				instances={instancesMemo}
 				texture={grass}
 			/>

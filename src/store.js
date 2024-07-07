@@ -21,23 +21,29 @@
 import { create } from 'zustand';
 
 const useStore = create((set) => ({
-	// initial state
-	instances: [],
-	setInstances: (instances) => set({ instances }),
+  // initial state
+  instances: [],
+  setInstances: (instances) => set({ instances }),
 
-	// texture
-	selectedTexture: 'dirt',
-	setSelectedTexture: (texture) => set({ selectedTexture: texture }),
+  // texture
+  selectedTexture: 'dirt',
+  setSelectedTexture: (texture) => set({ selectedTexture: texture }),
 
-	// add cube
-	addCube: (x, y, z, texture) => {
-		set((state) => ({
-			instances: [
-				...state.instances,
-				{ position: [x, y, z], texture: texture || state.selectedTexture },
-			],
-		}));
-	},
+  // add cube
+  addCube: (x, y, z) => {
+    set((state) => ({
+      cubes: [
+        ...state.cubes,
+        { position: [x, y, z], texture: state.selectedTexture },
+      ],
+    }));
+  },
+  cubes: [],
+  addCube: (x, y, z) => set((state) => ({
+    cubes: [...state.cubes, { position: [x, y, z], texture: state.selectedTexture }],
+  })),
 }));
 
 export default useStore;
+
+

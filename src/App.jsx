@@ -1,18 +1,28 @@
 import {
 	Environment,
 	KeyboardControls,
+	Loader,
 	PointerLockControls,
 } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
 import { Physics } from '@react-three/rapier';
 import { Player } from './Player';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import TextureSelector from './TextureSelector';
 import Ground_2 from './Ground_2';
+import { Cubes, Cube } from './Cube';
+import dirt from './assets/dirt.jpg';
+import glass from './assets/glass.png';
+import log from './assets/log.jpg';
 import { Perf } from 'r3f-perf';
 
 function App() {
 	const [action, setAction] = useState('idle');
+	const textures = {
+		dirt,
+		glass,
+		log,
+	};
 
 	return (
 		<>
@@ -56,25 +66,13 @@ function App() {
 						intensity={3.5}
 					/>
 					<ambientLight intensity={1.5} />
-					<Physics
+					{/* <Physics
 						gravity={[0, -20, 0]}
 						debug
 					>
 						<Ground_2 />
-						<Player
-							setAction={setAction}
-							action={action}
-							speed={4}
-							jump={8}
-						/>
-					</Physics>
-					<PointerLockControls />
-					<Perf />
-					{/* <Physics
-						debug
-						gravity={[0, -20, 0]}
-					>
-						<Ground />
+						<Cubes />
+						<Cube />
 						<Player
 							setAction={setAction}
 							action={action}
@@ -83,6 +81,35 @@ function App() {
 						/>
 					</Physics> */}
 					<PointerLockControls />
+					<Suspense fallback={null}>
+						<Physics
+							// debug
+							gravity={[0, -20, 0]}
+						>
+							<Ground_2 />
+							<Cubes />
+							<Cube
+								position={[0, -4, 0]}
+								texture={dirt}
+							/>
+							<Cube
+								position={[1, -4, 0]}
+								texture={glass}
+							/>
+							<Cube
+								position={[2, -4, 0]}
+								texture={log}
+							/>
+							<Player
+								setAction={setAction}
+								action={action}
+								speed={3}
+								jump={7}
+							/>
+						</Physics>
+					</Suspense>
+					<PointerLockControls />
+					<Perf />
 				</Canvas>
 			</KeyboardControls>
 		</>
