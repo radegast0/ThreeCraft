@@ -109,7 +109,7 @@ function App() {
 						</Physics>
 					</Suspense>
 					<PointerLockControls />
-					<Perf />
+					{/* <Perf /> */}
 				</Canvas>
 			</KeyboardControls>
 		</>

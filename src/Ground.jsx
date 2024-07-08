@@ -32,7 +32,6 @@ const Ground = () => {
 			}
 		}
 
-		console.log(instances.length);
 		return instances;
 	}, [size, noise, noiseScale, heightThreshold]);
 

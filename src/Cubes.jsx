@@ -24,9 +24,7 @@ const Cubes = ({ texture, limit }) => {
         ];
 
         const newCubePosition = directions[faceIndex];
-        console.log('Adding cube at:', newCubePosition);
         addCube(...newCubePosition, texture);
-		console.log('texture:', texture);
     }, [addCube]);
 
     return (
