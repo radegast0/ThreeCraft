@@ -7,7 +7,7 @@ import {
 import { Canvas } from '@react-three/fiber';
 import { Physics } from '@react-three/rapier';
 import { Player } from './Player';
-import { Suspense, useState } from 'react';
+import { Suspense, useRef, useState } from 'react';
 import TextureSelector from './TextureSelector';
 import Ground_2 from './Ground_2';
 import { Cubes, Cube } from './Cube';
@@ -15,6 +15,7 @@ import dirt from './assets/dirt.jpg';
 import glass from './assets/glass.png';
 import log from './assets/log.jpg';
 import { Perf } from 'r3f-perf';
+import Lights from './Lights';
 
 function App() {
 	const [action, setAction] = useState('idle');
@@ -60,12 +61,7 @@ function App() {
 						background
 					/>
 					{/* <OrbitControls /> */}
-					<directionalLight
-						castShadow
-						position={[4, 4, 1]}
-						intensity={3.5}
-					/>
-					<ambientLight intensity={1.5} />
+					<Lights />
 					{/* <Physics
 						gravity={[0, -20, 0]}
 						debug
